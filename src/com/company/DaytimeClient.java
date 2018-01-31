@@ -7,10 +7,10 @@ import java.net.Socket;
 
 public class DaytimeClient {
     public static void main(String[] args) {
-        String hostname = args.length > 0 ? args[0] : "time.nist.gov";
+        String hostname = args.length > 0 ? args[0] : "localhost";
         Socket socket = null;
         try {
-            socket = new Socket(hostname, 8000);
+            socket = new Socket(hostname, 8080);
             socket.setSoTimeout(15000);
             InputStream in = socket.getInputStream();
             StringBuilder time = new StringBuilder();
