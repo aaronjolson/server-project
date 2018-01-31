@@ -8,7 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class DaytimeUDPServer {
-    private final static int PORT = 8080;
+    private final static int PORT = 13;
     private final static Logger audit = Logger.getLogger("requests");
     private final static Logger errors = Logger.getLogger("errors");
     public static void main(String[] args) {

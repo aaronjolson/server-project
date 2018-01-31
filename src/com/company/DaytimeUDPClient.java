@@ -6,8 +6,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 public class DaytimeUDPClient {
-    private final static int PORT = 8080;
-    private static final String HOSTNAME = "time.nist.gov";
+    private final static int PORT = 13;
+    private static final String HOSTNAME = "localhost";
     public static void main(String[] args) {
         try (DatagramSocket socket = new DatagramSocket(0)) {
             socket.setSoTimeout(10000);
