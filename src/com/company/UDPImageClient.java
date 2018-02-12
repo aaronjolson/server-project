@@ -9,28 +9,31 @@ public class UDPImageClient {
 
     public static void main(String[] args) throws IOException {
         File myFile = new File("C:/Users/aaols/IdeaProjects/timeserver/src/com/company/eth.jpg");
-        DatagramSocket ds = null;
-        BufferedInputStream bis = null;
+        BufferedInputStream bufferedInputStream = null;
+        DatagramSocket datagramSocket = null;
         try {
-            ds = new DatagramSocket();
-            DatagramPacket dp;
+            datagramSocket = new DatagramSocket();
             int packetsize = 1024;
-            double nosofpackets;
-            nosofpackets = Math.ceil(((int) myFile.length()) / packetsize);
+            double nosofpackets = Math.ceil(((int) myFile.length()) / packetsize);
 
-            bis = new BufferedInputStream(new FileInputStream(myFile));
-            for (double i = 0; i < nosofpackets + 1; i++) {
+            bufferedInputStream = new BufferedInputStream(new FileInputStream(myFile));
+            for (double i = 0; i < nosofpackets+10; i++) {
                 byte[] mybytearray = new byte[packetsize];
-                bis.read(mybytearray, 0, mybytearray.length);
-                System.out.println("Packet:" + (i + 1));
-                dp = new DatagramPacket(mybytearray, mybytearray.length, InetAddress.getByName("127.0.0.1"), 4000);
-                ds.send(dp);
+                bufferedInputStream.read(mybytearray, 0, mybytearray.length);
+                System.out.println("Packet:" + (i + 1) + " - " + mybytearray.length + " - " + nosofpackets);
+                DatagramPacket dp = new DatagramPacket(mybytearray, mybytearray.length, InetAddress.getByName("127.0.0.1"), 4000);
+                datagramSocket.send(dp);
+                try {
+                    Thread.sleep(1L);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
         } finally {
-            if (bis != null)
-                bis.close();
-            if (ds != null)
-                ds.close();
+            if (bufferedInputStream != null)
+                bufferedInputStream.close();
+            if (datagramSocket != null)
+                datagramSocket.close();
         }
 
     }
