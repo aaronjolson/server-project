@@ -8,7 +8,8 @@ import java.net.InetAddress;
 public class UDPImageClient {
 
     public static void main(String[] args) throws IOException {
-        File myFile = new File("C:/Users/aaols/IdeaProjects/timeserver/src/com/company/eth.jpg");
+        String pathString = "C:/Users/aaols/IdeaProjects/timeserver/src/com/company/eth.jpg";
+        File myFile = new File(pathString);
         BufferedInputStream bufferedInputStream = null;
         DatagramSocket datagramSocket = null;
         try {
@@ -17,7 +18,7 @@ public class UDPImageClient {
             double nosofpackets = Math.ceil(((int) myFile.length()) / packetsize);
 
             bufferedInputStream = new BufferedInputStream(new FileInputStream(myFile));
-            for (double i = 0; i < nosofpackets+10; i++) {
+            for (double i = 0; i < nosofpackets+3; i++) {
                 byte[] mybytearray = new byte[packetsize];
                 bufferedInputStream.read(mybytearray, 0, mybytearray.length);
                 System.out.println("Packet:" + (i + 1) + " - " + mybytearray.length + " - " + nosofpackets);

@@ -20,10 +20,11 @@ public class UDPImageServer {
 
         System.out.println(numberOfPackets);
 
-        for (double i = 0; i < numberOfPackets + 10; i++){
+        for (double i = 0; i < numberOfPackets + 3; i++){
             serverSocket.receive(receivePacket);
             byte binaryData[] = receivePacket.getData();
-            System.out.println("Packet:"+ (i + 1) +" "+ Arrays.toString(receivePacket.getData()));
+
+            System.out.println("Packet:"+ (i + 1) +" "+ Arrays.toString(binaryData));
             bufferedOutputStream.write(binaryData, 0, binaryData.length);
         }
     }
