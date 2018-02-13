@@ -10,8 +10,9 @@ public class UDPImageServer {
     public static void main(String[] args) throws IOException {
         DatagramSocket serverSocket = new DatagramSocket(4000);
         int packetsize = 1024;
+        double allBytes = 0;
         double numberOfPackets = Math.ceil(((new File("C:/Users/aaols/IdeaProjects/timeserver/src/com/company/eth.jpg")).length()) / packetsize);
-        FileOutputStream fileOutputStream = new FileOutputStream("C:/Users/aaols/IdeaProjects/timeserver/src/com/company/eth2.jpg");
+        FileOutputStream fileOutputStream = new FileOutputStream("output.jpg");
 
         BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(fileOutputStream);
 
@@ -20,11 +21,13 @@ public class UDPImageServer {
 
         System.out.println(numberOfPackets);
 
-        for (double i = 0; i < numberOfPackets + 3; i++){
+        for (int i = 0; i < numberOfPackets + 3; i++){
             serverSocket.receive(receivePacket);
             byte binaryData[] = receivePacket.getData();
-
-            System.out.println("Packet:"+ (i + 1) +" "+ Arrays.toString(binaryData));
+            allBytes += binaryData.length;
+            System.out.println("Packet: " + (i + 1) +
+                    " - " + String.format("%d",(long)(allBytes - packetsize)) +
+                    " - " + String.format("%d",(long)allBytes));
             bufferedOutputStream.write(binaryData, 0, binaryData.length);
         }
     }

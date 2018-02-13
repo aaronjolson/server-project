@@ -15,13 +15,17 @@ public class UDPImageClient {
         try {
             datagramSocket = new DatagramSocket();
             int packetsize = 1024;
+            double allBytes = 0;
             double nosofpackets = Math.ceil(((int) myFile.length()) / packetsize);
 
             bufferedInputStream = new BufferedInputStream(new FileInputStream(myFile));
             for (double i = 0; i < nosofpackets+3; i++) {
                 byte[] mybytearray = new byte[packetsize];
                 bufferedInputStream.read(mybytearray, 0, mybytearray.length);
-                System.out.println("Packet:" + (i + 1) + " - " + mybytearray.length + " - " + nosofpackets);
+                allBytes += mybytearray.length;
+                System.out.println("Packet: " + (i + 1) +
+                        " - " + String.format("%d",(long)(allBytes - packetsize)) +
+                        " - " + String.format("%d",(long)allBytes));
                 DatagramPacket dp = new DatagramPacket(mybytearray, mybytearray.length, InetAddress.getByName("127.0.0.1"), 4000);
                 datagramSocket.send(dp);
                 try {
