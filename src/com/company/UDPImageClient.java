@@ -23,22 +23,31 @@ public class UDPImageClient {
             datagramSocket = new DatagramSocket();
             int packetsize = 1024;
             double allBytes = 0;
+            long file_length = myFile.length();
+            long countdown = myFile.length();
 
             System.out.println("file length is " + myFile.length());
 
-            double numberOfPackets = Math.ceil(((int) myFile.length()) / (packetsize - 24)); // - packet overhead
+            int numberOfPackets = (int)Math.ceil( myFile.length() / (packetsize - 24)); // - packet overhead
 
-            System.out.println("Number of packets needed " + numberOfPackets);
+            System.out.println("Number of packets needed " + (numberOfPackets + 1));
 
             bufferedInputStream = new BufferedInputStream(new FileInputStream(myFile));
-            for (double i = 0; i < numberOfPackets+1; i++) {
+            for (int i = 0; i < numberOfPackets+1; i++) {
                 byte[] mybytearray = new byte[packetsize];
                 bufferedInputStream.read(mybytearray, 0, mybytearray.length);
 
                 allBytes += mybytearray.length;
-                System.out.println("Packet: " + (i + 1) +
-                        " - " + String.format("%d",(long)(allBytes - packetsize)) +
-                        " - " + String.format("%d",(long)allBytes));
+                countdown -= 1000;
+                if (countdown > 0) {
+                    System.out.println("Packet: " + (i + 1) +
+                            " - " + String.format("%d", (long) ((file_length - countdown) - 1000)) +
+                            " - " + String.format("%d", (long) (file_length - countdown)));
+                } else { // last packet, not full sized
+                    System.out.println("Packet: " + (i + 1) +
+                            " - " + String.format("%d", (long) ((file_length - countdown) - 1000)) +
+                            " - " + String.format("%d", (long) (file_length)));
+                }
                 DatagramPacket dp = new DatagramPacket(mybytearray, mybytearray.length, InetAddress.getByName("127.0.0.1"), 4000);
                 datagramSocket.send(dp);
                 try {
