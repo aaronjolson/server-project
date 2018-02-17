@@ -6,9 +6,16 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 public class UDPImageClient {
+    // C:\Users\aaols\IdeaProjects\timeserver\src>javac com/company/*.java
+    // java -classpath . com.company.UDPImageClient .././keyboard.jpg
 
     public static void main(String[] args) throws IOException {
-        String pathString = "C:/Users/aaols/IdeaProjects/timeserver/src/com/company/eth.jpg";
+        String pathString;
+        if (args.length > 0) {
+            pathString = args[0];
+        } else {
+            pathString = "./keyboard.jpg";
+        }
         File myFile = new File(pathString);
         BufferedInputStream bufferedInputStream = null;
         DatagramSocket datagramSocket = null;
@@ -16,12 +23,18 @@ public class UDPImageClient {
             datagramSocket = new DatagramSocket();
             int packetsize = 1024;
             double allBytes = 0;
-            double nosofpackets = Math.ceil(((int) myFile.length()) / packetsize);
+
+            System.out.println("file length is " + myFile.length());
+
+            double numberOfPackets = Math.ceil(((int) myFile.length()) / (packetsize - 24)); // - packet overhead
+
+            System.out.println("Number of packets needed " + numberOfPackets);
 
             bufferedInputStream = new BufferedInputStream(new FileInputStream(myFile));
-            for (double i = 0; i < nosofpackets+3; i++) {
+            for (double i = 0; i < numberOfPackets+1; i++) {
                 byte[] mybytearray = new byte[packetsize];
                 bufferedInputStream.read(mybytearray, 0, mybytearray.length);
+
                 allBytes += mybytearray.length;
                 System.out.println("Packet: " + (i + 1) +
                         " - " + String.format("%d",(long)(allBytes - packetsize)) +
