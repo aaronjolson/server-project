@@ -6,8 +6,6 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 public class UDPImageClient {
-    // C:\Users\aaols\IdeaProjects\timeserver\src>javac com/company/*.java
-    // java -classpath . com.company.UDPImageClient .././keyboard.jpg
 
     public static void main(String[] args) throws IOException {
         String pathString;
@@ -21,14 +19,10 @@ public class UDPImageClient {
         DatagramSocket datagramSocket = null;
         try {
             datagramSocket = new DatagramSocket();
-            int packetsize = 1024;
+            int packetsize = 64;
             double allBytes = 0;
-            long file_length = myFile.length();
-            long countdown = myFile.length();
 
-            int numberOfPackets = (int)Math.ceil( myFile.length() / (packetsize - 24)); // - packet overhead
-
-//            System.out.println("Number of packets needed " + (numberOfPackets + 1));
+            int numberOfPackets = (int)Math.ceil( myFile.length() / (packetsize - 4)); // - packet overhead
 
             bufferedInputStream = new BufferedInputStream(new FileInputStream(myFile));
             for (int i = 0; i < numberOfPackets+1; i++) {
@@ -36,16 +30,9 @@ public class UDPImageClient {
                 bufferedInputStream.read(mybytearray, 0, mybytearray.length);
 
                 allBytes += mybytearray.length;
-                countdown -= 1000;
-                if (countdown > 0) {
-                    System.out.println("Packet: " + (i + 1) +
-                            " - " + String.format("%d", (long) ((file_length - countdown) - 1000)) +
-                            " - " + String.format("%d", (long) (file_length - countdown)));
-                } else { // last packet, not full sized
-                    System.out.println("Packet: " + (i + 1) +
-                            " - " + String.format("%d", (long) ((file_length - countdown) - 1000)) +
-                            " - " + String.format("%d", (long) (file_length)));
-                }
+                System.out.println("Packet: " + (i + 1) +
+                        " - " + String.format("%d",(long)(allBytes - packetsize)) +
+                        " - " + String.format("%d",(long)allBytes));
                 DatagramPacket datagramPacket = new DatagramPacket(mybytearray, mybytearray.length, InetAddress.getByName("127.0.0.1"), 4000);
                 datagramSocket.send(datagramPacket);
                 try {
