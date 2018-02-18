@@ -6,13 +6,12 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketTimeoutException;
-import java.util.Arrays;
 
 public class UDPImageServer {
 
     public static void main(String[] args) throws IOException {
         DatagramSocket serverSocket = new DatagramSocket(4000);
-        int packetsize = 1024;
+        int packetsize = 64;
         double allBytes = 0;
         FileOutputStream fileOutputStream = new FileOutputStream("output.jpg");
 
