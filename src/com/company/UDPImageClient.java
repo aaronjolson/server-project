@@ -20,7 +20,7 @@ public class UDPImageClient {
         try {
             datagramSocket = new DatagramSocket();
             int packetsize = 64;
-            double allBytes = 0;
+            long allBytes = 0;
 
             int numberOfPackets = (int)Math.ceil( myFile.length() / (packetsize - 4)); // - packet overhead
 
@@ -31,8 +31,8 @@ public class UDPImageClient {
 
                 allBytes += mybytearray.length;
                 System.out.println("Packet: " + (i + 1) +
-                        " - " + String.format("%d",(long)(allBytes - packetsize)) +
-                        " - " + String.format("%d",(long)allBytes));
+                        " - " + String.format("%d",(allBytes - packetsize)) +
+                        " - " + String.format("%d",allBytes));
                 DatagramPacket datagramPacket = new DatagramPacket(mybytearray, mybytearray.length, InetAddress.getByName("127.0.0.1"), 4000);
                 datagramSocket.send(datagramPacket);
                 try {
