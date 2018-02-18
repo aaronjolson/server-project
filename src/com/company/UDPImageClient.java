@@ -26,11 +26,9 @@ public class UDPImageClient {
             long file_length = myFile.length();
             long countdown = myFile.length();
 
-            System.out.println("file length is " + myFile.length());
-
             int numberOfPackets = (int)Math.ceil( myFile.length() / (packetsize - 24)); // - packet overhead
 
-            System.out.println("Number of packets needed " + (numberOfPackets + 1));
+//            System.out.println("Number of packets needed " + (numberOfPackets + 1));
 
             bufferedInputStream = new BufferedInputStream(new FileInputStream(myFile));
             for (int i = 0; i < numberOfPackets+1; i++) {
@@ -48,8 +46,8 @@ public class UDPImageClient {
                             " - " + String.format("%d", (long) ((file_length - countdown) - 1000)) +
                             " - " + String.format("%d", (long) (file_length)));
                 }
-                DatagramPacket dp = new DatagramPacket(mybytearray, mybytearray.length, InetAddress.getByName("127.0.0.1"), 4000);
-                datagramSocket.send(dp);
+                DatagramPacket datagramPacket = new DatagramPacket(mybytearray, mybytearray.length, InetAddress.getByName("127.0.0.1"), 4000);
+                datagramSocket.send(datagramPacket);
                 try {
                     Thread.sleep(1L);
                 } catch (InterruptedException e) {

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketTimeoutException;
+import java.util.Arrays;
 
 public class UDPImageServer {
 
@@ -21,9 +22,9 @@ public class UDPImageServer {
         DatagramPacket receivePacket = new DatagramPacket(mybytearray, mybytearray.length);
 
         System.out.println("Starting Server...");
-        boolean x = true;
+        boolean serverRunning = true;
         int i = 0;
-        while (x) {
+        while (serverRunning) {
             try {
                 serverSocket.receive(receivePacket);
                 serverSocket.setSoTimeout(5000);
