@@ -86,9 +86,10 @@ public class UDPSWClient {
         try {
             datagramSocket = new DatagramSocket();
             int packetsize = 1024;
+            int extraDataOffset = packetsize / 16;
             long allBytes = 0;
 
-            int numberOfPackets = (int)Math.ceil( myFile.length() / (packetsize - 4)); // - packet overhead
+            int numberOfPackets = (int)Math.ceil( myFile.length() / (packetsize - extraDataOffset)); // - packet overhead
 
             bufferedInputStream = new BufferedInputStream(new FileInputStream(myFile));
             for (int i = 0; i < numberOfPackets+1; i++) {
