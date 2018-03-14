@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketTimeoutException;
+import java.util.Arrays;
 
 /*
 * The information provided in the receiver’s window should include (fixed width output), for each datagram received:
@@ -70,7 +71,7 @@ public class UDPSWServer {
 
     public static void main(String[] args) throws IOException {
         DatagramSocket serverSocket = new DatagramSocket(4000);
-        int packetsize = 1024;
+        int packetsize = 10000; // This can be any size > sender packet size now
         double allBytes = 0;
         FileOutputStream fileOutputStream = new FileOutputStream("output.jpg");
 
@@ -86,11 +87,18 @@ public class UDPSWServer {
         boolean serverRunning = true;
         int i = 0;
 
+//        datagram.setData,
+//        socket.recieve,
+//        array.copyOfrange()
+
         while (serverRunning) {
             try {
                 serverSocket.receive(receivePacket);
-                serverSocket.setSoTimeout(5000);
+                serverSocket.setSoTimeout(3000);
                 byte binaryData[] = receivePacket.getData();
+
+                binaryData = Arrays.copyOfRange(binaryData, 0, receivePacket.getLength());
+
                 allBytes += binaryData.length;
                 System.out.println(RECV + " " + String.format("%d",System.currentTimeMillis()) +
                         " " + (i + 1) + " " + RECV);
@@ -105,5 +113,13 @@ public class UDPSWServer {
                     String.format("%d",System.currentTimeMillis()) + " " + SENT
             );
         }
+    }
+
+    private static byte[] trimBytes(byte[] bytes){
+        int i = bytes.length -1;
+        while(i >= 0 && bytes[i] == 0){
+            --i;
+        }
+        return Arrays.copyOf(bytes, i + 1);
     }
 }
